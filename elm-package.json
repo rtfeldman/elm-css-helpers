@@ -1,0 +1,15 @@
+{
+    "version": "1.0.0",
+    "summary": "Helper functions for using elm-css with elm-html",
+    "repository": "https://github.com/rtfeldman/elm-css-helpers.git",
+    "license": "BSD-3-Clause",
+    "source-directories": [
+        "src"
+    ],
+    "exposed-modules": [],
+    "dependencies": {
+        "evancz/elm-html": "3.0.0 <= v < 5.0.0",
+        "elm-lang/core": "2.0.0 <= v < 4.0.0"
+    },
+    "elm-version": "0.15.0 <= v < 0.17.0"
+}
