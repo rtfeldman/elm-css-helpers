@@ -1,14 +1,15 @@
-module Html.CssHelpers (withNamespace) where
+module Html.CssHelpers (withNamespace, style, stylesheetLink) where
 
 {-| Helper functions for using elm-css with elm-html.
 
-@docs withNamespace
+@docs withNamespace, style, stylesheetLink
 -}
 
 import Css.Helpers exposing (toCssIdentifier, identifierToString)
-import Html exposing (Attribute)
+import Html exposing (Attribute, Html)
 import Html.Attributes as Attr
 import String
+import Json.Encode exposing (string)
 
 
 type alias Helpers class id =
@@ -90,3 +91,27 @@ namespacedClass name list =
 class : List class -> Attribute
 class =
   namespacedClass ""
+
+
+{-| Create an inline style from CSS
+-}
+style : String -> Html
+style text =
+    Html.node
+        "style"
+        [ Attr.property "textContent" <| string text
+        , Attr.property "type" <| string "text/css" ]
+        []
+
+
+{-| Link in a stylesheet from a url
+-}
+stylesheetLink : String -> Html
+stylesheetLink url =
+    Html.node
+        "link"
+        [ Attr.property "rel" (string "stylesheet")
+        , Attr.property "type" (string "text/css")
+        , Attr.property "href" (string url)
+        ]
+        []
