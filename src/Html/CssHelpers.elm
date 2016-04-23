@@ -1,8 +1,10 @@
-module Html.CssHelpers (withNamespace, style, stylesheetLink) where
+module Html.CssHelpers (withNamespace, style, stylesheetLink, Namespace, Helpers) where
 
 {-| Helper functions for using elm-css with elm-html.
 
 @docs withNamespace, style, stylesheetLink
+
+@docs Helpers, Namespace
 -}
 
 import Css.Helpers exposing (toCssIdentifier, identifierToString)
@@ -12,13 +14,16 @@ import String
 import Json.Encode exposing (string)
 
 
+{-| Helpers for working on a given class/id
+-}
 type alias Helpers class id =
   { class : List class -> Attribute
   , classList : List ( class, Bool ) -> Attribute
   , id : id -> Attribute
   }
 
-
+{-| namespaced helpers for working on a given class/id
+-}
 type alias Namespace name class id =
   { class : List class -> Attribute
   , classList : List ( class, Bool ) -> Attribute
