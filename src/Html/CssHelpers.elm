@@ -17,19 +17,20 @@ import Json.Encode exposing (string)
 {-| Helpers for working on a given class/id
 -}
 type alias Helpers class id msg =
-  { class : List class -> Attribute msg
-  , classList : List ( class, Bool ) -> Attribute msg
-  , id : id -> Attribute msg
-  }
+    { class : List class -> Attribute msg
+    , classList : List ( class, Bool ) -> Attribute msg
+    , id : id -> Attribute msg
+    }
+
 
 {-| namespaced helpers for working on a given class/id
 -}
 type alias Namespace name class id msg =
-  { class : List class -> Attribute msg
-  , classList : List ( class, Bool ) -> Attribute msg
-  , id : id -> Attribute msg
-  , name : name
-  }
+    { class : List class -> Attribute msg
+    , classList : List ( class, Bool ) -> Attribute msg
+    , id : id -> Attribute msg
+    , name : name
+    }
 
 
 {-| Takes a namespace and returns helper functions for `id`, `class`, and
@@ -54,58 +55,58 @@ The above would generate this DOM element:
 -}
 withNamespace : name -> Namespace name class id msg
 withNamespace name =
-  { class = namespacedClass name
-  , classList = namespacedClassList name
-  , id = toCssIdentifier >> Attr.id
-  , name = name
-  }
+    { class = namespacedClass name
+    , classList = namespacedClassList name
+    , id = toCssIdentifier >> Attr.id
+    , name = name
+    }
 
 
 helpers : Helpers class id msg
 helpers =
-  { class = class
-  , classList = classList
-  , id = toCssIdentifier >> Attr.id
-  }
+    { class = class
+    , classList = classList
+    , id = toCssIdentifier >> Attr.id
+    }
 
 
 namespacedClassList : name -> List ( class, Bool ) -> Attribute msg
 namespacedClassList name list =
-  list
-    |> List.filter snd
-    |> List.map fst
-    |> namespacedClass name
+    list
+        |> List.filter snd
+        |> List.map fst
+        |> namespacedClass name
 
 
 classList : List ( class, Bool ) -> Attribute msg
 classList list =
-  list
-    |> List.filter snd
-    |> List.map fst
-    |> class
+    list
+        |> List.filter snd
+        |> List.map fst
+        |> class
 
 
 namespacedClass : name -> List class -> Attribute msg
 namespacedClass name list =
-  list
-    |> List.map (identifierToString name)
-    |> String.join " "
-    |> Attr.class
+    list
+        |> List.map (identifierToString name)
+        |> String.join " "
+        |> Attr.class
 
 
 class : List class -> Attribute msg
 class =
-  namespacedClass ""
+    namespacedClass ""
 
 
 {-| Create an inline style from CSS
 -}
 style : String -> Html msg
 style text =
-    Html.node
-        "style"
+    Html.node "style"
         [ Attr.property "textContent" <| string text
-        , Attr.property "type" <| string "text/css" ]
+        , Attr.property "type" <| string "text/css"
+        ]
         []
 
 
@@ -113,8 +114,7 @@ style text =
 -}
 stylesheetLink : String -> Html msg
 stylesheetLink url =
-    Html.node
-        "link"
+    Html.node "link"
         [ Attr.property "rel" (string "stylesheet")
         , Attr.property "type" (string "text/css")
         , Attr.property "href" (string url)
