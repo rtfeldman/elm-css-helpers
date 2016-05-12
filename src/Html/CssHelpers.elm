@@ -1,4 +1,4 @@
-module Html.CssHelpers (withNamespace, style, stylesheetLink, Namespace, Helpers) where
+module Html.CssHelpers exposing (withNamespace, style, stylesheetLink, Namespace, Helpers)
 
 {-| Helper functions for using elm-css with elm-html.
 
@@ -16,18 +16,18 @@ import Json.Encode exposing (string)
 
 {-| Helpers for working on a given class/id
 -}
-type alias Helpers class id =
-  { class : List class -> Attribute
-  , classList : List ( class, Bool ) -> Attribute
-  , id : id -> Attribute
+type alias Helpers class id msg =
+  { class : List class -> Attribute msg
+  , classList : List ( class, Bool ) -> Attribute msg
+  , id : id -> Attribute msg
   }
 
 {-| namespaced helpers for working on a given class/id
 -}
-type alias Namespace name class id =
-  { class : List class -> Attribute
-  , classList : List ( class, Bool ) -> Attribute
-  , id : id -> Attribute
+type alias Namespace name class id msg =
+  { class : List class -> Attribute msg
+  , classList : List ( class, Bool ) -> Attribute msg
+  , id : id -> Attribute msg
   , name : name
   }
 
@@ -52,7 +52,7 @@ The above would generate this DOM element:
 
     <h1 id="Hero" class="homepage_Fancy">Hello, World!</h1>
 -}
-withNamespace : name -> Namespace name class id
+withNamespace : name -> Namespace name class id msg
 withNamespace name =
   { class = namespacedClass name
   , classList = namespacedClassList name
@@ -61,7 +61,7 @@ withNamespace name =
   }
 
 
-helpers : Helpers class id
+helpers : Helpers class id msg
 helpers =
   { class = class
   , classList = classList
@@ -69,7 +69,7 @@ helpers =
   }
 
 
-namespacedClassList : name -> List ( class, Bool ) -> Attribute
+namespacedClassList : name -> List ( class, Bool ) -> Attribute msg
 namespacedClassList name list =
   list
     |> List.filter snd
@@ -77,7 +77,7 @@ namespacedClassList name list =
     |> namespacedClass name
 
 
-classList : List ( class, Bool ) -> Attribute
+classList : List ( class, Bool ) -> Attribute msg
 classList list =
   list
     |> List.filter snd
@@ -85,7 +85,7 @@ classList list =
     |> class
 
 
-namespacedClass : name -> List class -> Attribute
+namespacedClass : name -> List class -> Attribute msg
 namespacedClass name list =
   list
     |> List.map (identifierToString name)
@@ -93,14 +93,14 @@ namespacedClass name list =
     |> Attr.class
 
 
-class : List class -> Attribute
+class : List class -> Attribute msg
 class =
   namespacedClass ""
 
 
 {-| Create an inline style from CSS
 -}
-style : String -> Html
+style : String -> Html msg
 style text =
     Html.node
         "style"
@@ -111,7 +111,7 @@ style text =
 
 {-| Link in a stylesheet from a url
 -}
-stylesheetLink : String -> Html
+stylesheetLink : String -> Html msg
 stylesheetLink url =
     Html.node
         "link"
