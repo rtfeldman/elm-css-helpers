@@ -11,6 +11,7 @@ import Css.Helpers exposing (toCssIdentifier, identifierToString)
 import Html exposing (Attribute, Html)
 import Html.Attributes as Attr
 import String
+import Tuple
 import Json.Encode exposing (string)
 
 
@@ -73,16 +74,16 @@ helpers =
 namespacedClassList : name -> List ( class, Bool ) -> Attribute msg
 namespacedClassList name list =
     list
-        |> List.filter snd
-        |> List.map fst
+        |> List.filter Tuple.second
+        |> List.map Tuple.first
         |> namespacedClass name
 
 
 classList : List ( class, Bool ) -> Attribute msg
 classList list =
     list
-        |> List.filter snd
-        |> List.map fst
+        |> List.filter Tuple.second
+        |> List.map Tuple.first
         |> class
 
 
