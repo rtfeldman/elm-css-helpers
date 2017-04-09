@@ -1,8 +1,8 @@
-module Html.CssHelpers exposing (withNamespace, style, stylesheetLink, Namespace, Helpers)
+module Html.CssHelpers exposing (withNamespace, withClass, style, stylesheetLink, Namespace, Helpers)
 
 {-| Helper functions for using elm-css with elm-html.
 
-@docs withNamespace, style, stylesheetLink
+@docs withNamespace, withClass, style, stylesheetLink
 
 @docs Helpers, Namespace
 -}
@@ -13,6 +13,39 @@ import Html.Attributes as Attr
 import String
 import Tuple
 import Json.Encode exposing (string)
+
+
+{-| Prepend the given class name to a `Html.node` function's attributes list.
+
+    import Html exposing (Html, Attribute, text)
+    import Html.Attributes exposing (class)
+    import Html.CssHelpers exposing (withClass)
+
+
+    {-| Create a `button` variant that automatically includes a "warning" class.
+    -}
+    warningButton : List (Attribute msg) -> List (Html msg) -> Html msg
+    warningButton =
+        withClass "warning" button
+
+
+    confirmDeleteButton : Html msg
+    confirmDeleteButton =
+        -- Equivalent to:
+        --
+        -- button [ class "warning" ] [ text "Confirm Deletion" ]
+        warningButton [] [ text "Confirm Deletion" ]
+
+Since `class` attributes "stack" in Elm (e.g.
+`button [ class "warning", class "centered" ] []` is equivalent to
+`button [ class "warning centered" ] []`), this API permits further
+customization on a per-instance basis, either by using the `style` attribute
+or by stacking additional classes
+(for example `warningButton [ class "centered" ] []`).
+-}
+withClass : String -> (List (Attribute msg) -> List (Html msg) -> Html msg) -> List (Attribute msg) -> List (Html msg) -> Html msg
+withClass className makeElem attrs =
+    makeElem (Attr.class className :: attrs)
 
 
 {-| Helpers for working on a given class/id
