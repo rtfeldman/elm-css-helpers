@@ -1,13 +1,23 @@
-module Html.CssHelpers exposing (withNamespace, withClass, style, stylesheetLink, Namespace, Helpers)
+module Html.CssHelpers
+    exposing
+        ( withNamespace
+        , withClass
+        , style
+        , stylesheetLink
+        , inlineStyles
+        , Namespace
+        , Helpers
+        )
 
 {-| Helper functions for using elm-css with elm-html.
 
-@docs withNamespace, withClass, style, stylesheetLink
+@docs withNamespace, withClass, style, stylesheetLink, inlineStyles
 
 @docs Helpers, Namespace
 -}
 
 import Css.Helpers exposing (toCssIdentifier, identifierToString)
+import Css
 import Html exposing (Attribute, Html)
 import Html.Attributes as Attr
 import String
@@ -154,3 +164,33 @@ stylesheetLink url =
         , Attr.property "href" (string url)
         ]
         []
+
+
+{-| Create a style attribute from a list of Css.Mixins,
+including the `!important` directive.
+
+    view =
+        div
+          [ inlineStyles
+            [ backgroundColor (rgb 10 20 30) |> important ]
+          ]
+          [ text "Hello, World!" ]
+
+The above would generate this DOM element:
+
+    <div style="background-color: rgb(10, 20, 30) !important;">
+      Hello, World!
+    </div>
+-}
+inlineStyles : List Css.Mixin -> Html.Attribute msg
+inlineStyles styles =
+    let
+        formatPairAsString : ( String, String ) -> String
+        formatPairAsString pair =
+            (Tuple.first pair) ++ ": " ++ (Tuple.second pair) ++ ";"
+    in
+        Css.asPairs styles
+            |> List.map formatPairAsString
+            |> String.concat
+            |> Json.Encode.string
+            |> Attr.property "style"
