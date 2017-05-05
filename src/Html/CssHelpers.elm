@@ -143,7 +143,7 @@ class =
     namespacedClass ""
 
 
-{-| Create an inline style from CSS
+{-| Create a style tag from CSS
 -}
 style : String -> Html msg
 style text =
