@@ -186,8 +186,8 @@ inlineStyles : List Css.Mixin -> Html.Attribute msg
 inlineStyles styles =
     let
         formatPairAsString : ( String, String ) -> String
-        formatPairAsString pair =
-            (Tuple.first pair) ++ ": " ++ (Tuple.second pair) ++ ";"
+        formatPairAsString ( key, value ) =
+            key ++ ": " ++ value ++ ";"
     in
         Css.asPairs styles
             |> List.map formatPairAsString
